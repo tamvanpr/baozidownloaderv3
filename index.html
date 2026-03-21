@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Baozi Downloader V3</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at 20% 30%, #0a0f1a, #03060c);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .glass-card {
+            max-width: 750px;
+            width: 100%;
+            background: rgba(18, 22, 35, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            border: 1px solid rgba(56, 217, 169, 0.25);
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(56, 217, 169, 0.1);
+            padding: 1.8rem 1.8rem 2rem;
+            transition: all 0.2s ease;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 1.8rem;
+        }
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #e2ffe8, #9effcf);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+        .sub {
+            color: #8e9aaf;
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+        }
+
+        /* Input dan tombol */
+        .input-field {
+            width: 100%;
+            background: #0f121e;
+            border-radius: 60px;
+            padding: 0.25rem 1.2rem;
+            border: 1px solid #252e3f;
+            transition: all 0.2s;
+            margin-bottom: 1rem;
+        }
+        .input-field:focus-within {
+            border-color: #38d9a9;
+            box-shadow: 0 0 0 2px rgba(56, 217, 169, 0.3);
+        }
+        .input-field input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding: 0.9rem 0;
+            color: #f0f3fa;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 1.2rem;
+        }
+        .button-group button {
+            flex: 1;
+            background: #1f4735;
+            border: none;
+            border-radius: 50px;
+            padding: 0.75rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .button-group button:hover {
+            background: #2c6e4f;
+            transform: scale(0.98);
+        }
+        .reset-btn {
+            background: #1e272e;
+            border: 1px solid #2a3343;
+        }
+        .reset-btn:hover {
+            background: #2a3343;
+            border-color: #38d9a9;
+        }
+
+        textarea {
+            width: 100%;
+            background: #0a0e18;
+            border: 1px solid #252e3f;
+            border-radius: 1.2rem;
+            padding: 1rem;
+            color: #c7f0da;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.75rem;
+            resize: vertical;
+            line-height: 1.5;
+            margin: 0.5rem 0 1rem;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #38d9a9;
+        }
+
+        .btn-primary {
+            background: linear-gradient(105deg, #1f4735, #15422f);
+            width: 100%;
+            border: none;
+            border-radius: 60px;
+            padding: 0.9rem;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid rgba(56, 217, 169, 0.4);
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: linear-gradient(105deg, #2a694c, #1e543e);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -8px rgba(0,0,0,0.5);
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-wrap {
+            margin: 1rem 0;
+        }
+        .progress-bar-bg {
+            background: #1a1f2c;
+            border-radius: 40px;
+            height: 6px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #2c6e4f, #6ef0b0);
+            width: 0%;
+            height: 100%;
+            transition: width 0.2s ease;
+        }
+        .log-box {
+            background: #070b12;
+            border-radius: 1.2rem;
+            padding: 0.9rem;
+            font-family: 'SF Mono', monospace;
+            font-size: 0.7rem;
+            color: #b0f5cf;
+            max-height: 220px;
+            overflow-y: auto;
+            border: 1px solid #202633;
+            margin-top: 1rem;
+        }
+
+        .fallback {
+            text-align: center;
+            margin-top: 1.2rem;
+            font-size: 0.7rem;
+            color: #8e9aaf;
+        }
+        .fallback a {
+            color: #6ef0b0;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .fallback a:hover {
+            text-decoration: underline;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: #11161f;
+            border-radius: 1.8rem;
+            max-width: 380px;
+            width: 90%;
+            padding: 1.5rem;
+            border: 1px solid #2c6e4f;
+            box-shadow: 0 20px 35px -10px black;
+        }
+        .modal-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            color: #b3ffcf;
+        }
+        .modal-content p {
+            font-size: 0.8rem;
+            color: #b0c4de;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 1.5rem;
+        }
+        .modal-buttons button {
+            flex: 1;
+            background: #1e272e;
+            border: none;
+            border-radius: 40px;
+            padding: 0.7rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+        }
+        .modal-buttons button:first-child {
+            background: #2c6e4f;
+        }
+        input[type="file"] {
+            background: #0a0e18;
+            border: 1px solid #2a3343;
+            border-radius: 40px;
+            padding: 0.7rem;
+            width: 100%;
+            margin: 1rem 0;
+            color: #eef;
+        }
+
+        @media (max-width: 560px) {
+            .glass-card {
+                padding: 1.2rem;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .button-group button {
+                font-size: 0.8rem;
+                padding: 0.65rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="glass-card">
+    <div class="header">
+        <h1>Baozi Downloader V3</h1>
+        <div class="sub">Baozi Downloader by Mochitools</div>
+    </div>
+
+    <div class="input-field">
+        <input type="text" id="chapterUrl" placeholder="https://app.baozimh.com/... or twmanga.com/...">
+    </div>
+
+    <div class="button-group">
+        <button id="fetchBtn">⟳ Fetch links</button>
+        <button id="resetBtn" class="reset-btn">⟳ Reset</button>
+    </div>
+
+    <textarea id="linkList" rows="3" placeholder="Image links will appear here after fetch..." readonly></textarea>
+
+    <button id="downloadBtn" class="btn-primary" disabled>
+        <span>⬇️</span> Download & cut banner
+    </button>
+
+    <div class="progress-wrap">
+        <div class="progress-bar-bg">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="log-box" id="logBox">
+        Ready for use!
+    </div>
+
+    <div class="fallback">
+        💡 Having trouble? <a href="#" id="uploadFallbackLink">Upload saved HTML file</a> (Ctrl+S)
+    </div>
+</div>
+
+<!-- Modal (upload HTML) -->
+<div id="uploadModal" class="modal">
+    <div class="modal-content">
+        <h3>Upload HTML file</h3>
+        <p>Save the chapter page as HTML (Ctrl+S / "Save page as") then upload it.</p>
+        <input type="file" id="fallbackFile" accept=".html,.htm">
+        <div class="modal-buttons">
+            <button id="processFallbackBtn">Process file</button>
+            <button id="closeModalBtn">Cancel</button>
+        </div>
+        <div id="fallbackLog" style="margin-top: 12px; font-size: 0.7rem; color:#b0f5cf;"></div>
+    </div>
+</div>
+
+<script>
+    // ---------- CONFIG ----------
+    const PROXY = "YOUR_PROXY";
+    const BANNER_REF_URL = "https://i.imgur.com/PKrIsv3.jpeg";
+    const BANNER_HEIGHT = 200;
+    const HASH_SIZE = 32;
+    const THRESHOLD = 80;
+
+    const BAOZICDN_REGEX = /^https?:\/\/(?:[\w-]+)\.baozicdn\.com\/(.+)$/;
+    const STATIC_URL_PREFIX = 'https://static-tw.baozimh.com/';
+
+    let extractedLinks = [];
+    let bannerHash = null;
+    let bannerReady = false;
+
+    // DOM elements
+    const urlInput = document.getElementById("chapterUrl");
+    const fetchBtn = document.getElementById("fetchBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const linkTextarea = document.getElementById("linkList");
+    const downloadBtn = document.getElementById("downloadBtn");
+    const progressFill = document.getElementById("progressFill");
+    const logBox = document.getElementById("logBox");
+
+    function log(msg, isError = false) {
+        const prefix = isError ? "⚠️ " : "▸ ";
+        logBox.innerHTML += `<span style="color:${isError ? '#ffb4a2' : '#b0f5cf'}">${prefix}${msg}</span><br>`;
+        logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function setProgress(pct) {
+        progressFill.style.width = Math.min(100, pct) + "%";
+    }
+
+    function resetAll() {
+        urlInput.value = "";
+        linkTextarea.value = "";
+        extractedLinks = [];
+        downloadBtn.disabled = true;
+        setProgress(0);
+        logBox.innerHTML = "Ready for use!";
+    }
+
+    function convertChapterUrl(inputUrl) {
+        let url = inputUrl.trim();
+        if (!url.startsWith('http')) url = 'https://' + url;
+        try {
+            const urlObj = new URL(url);
+            if (urlObj.hostname === 'www.twmanga.com') {
+                const newHost = 'app.baozimh.com';
+                const newPath = '/baozimhapp' + urlObj.pathname;
+                return `https://${newHost}${newPath}${urlObj.search}`;
+            }
+            return url;
+        } catch(e) {
+            return url;
+        }
+    }
+
+    function convertImageUrl(imageUrl) {
+        if (BAOZICDN_REGEX.test(imageUrl)) {
+            return imageUrl.replace(BAOZICDN_REGEX, STATIC_URL_PREFIX + '$1');
+        }
+        return imageUrl;
+    }
+
+    // ---------- BANNER HASH ----------
+    async function loadBannerReference() {
+        logBox.innerHTML = "Loading banner reference...";
+        try {
+            const img = await loadImageFromUrl(BANNER_REF_URL);
+            bannerHash = computeAverageHash(img);
+            bannerReady = true;
+            logBox.innerHTML = "Ready for use!";
+            if (extractedLinks.length) downloadBtn.disabled = false;
+        } catch (err) {
+            logBox.innerHTML = "⚠️ Banner failed to load";
+        }
+    }
+
+    function loadImageFromUrl(url) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            img.onload = () => resolve(img);
+            img.onerror = reject;
+            img.src = url;
+        });
+    }
+
+    function computeAverageHash(img) {
+        const canvas = document.createElement("canvas");
+        canvas.width = HASH_SIZE;
+        canvas.height = HASH_SIZE;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, HASH_SIZE, HASH_SIZE);
+        const data = ctx.getImageData(0, 0, HASH_SIZE, HASH_SIZE).data;
+        let grays = [];
+        for (let i = 0; i < data.length; i += 4) {
+            let gray = (data[i] + data[i+1] + data[i+2]) / 3;
+            grays.push(gray);
+        }
+        const avg = grays.reduce((a,b)=>a+b,0)/grays.length;
+        return grays.map(v => v > avg ? 1 : 0);
+    }
+
+    function getHashRegion(img, sx, sy, sw, sh) {
+        const canvas = document.createElement("canvas");
+        canvas.width = HASH_SIZE;
+        canvas.height = HASH_SIZE;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, sx, sy, sw, sh, 0, 0, HASH_SIZE, HASH_SIZE);
+        const data = ctx.getImageData(0, 0, HASH_SIZE, HASH_SIZE).data;
+        let grays = [];
+        for (let i = 0; i < data.length; i += 4) {
+            grays.push((data[i] + data[i+1] + data[i+2]) / 3);
+        }
+        const avg = grays.reduce((a,b)=>a+b,0)/grays.length;
+        return grays.map(v => v > avg ? 1 : 0);
+    }
+
+    function hammingDistance(a, b) {
+        let diff = 0;
+        for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) diff++;
+        return diff;
+    }
+
+    async function detectBannerPosition(img) {
+        if (!bannerHash) return "none";
+        const w = img.width, h = img.height;
+        if (h <= BANNER_HEIGHT) return "none";
+        const topHash = getHashRegion(img, 0, 0, w, BANNER_HEIGHT);
+        const bottomHash = getHashRegion(img, 0, h - BANNER_HEIGHT, w, BANNER_HEIGHT);
+        const topDist = hammingDistance(topHash, bannerHash);
+        const bottomDist = hammingDistance(bottomHash, bannerHash);
+        if (topDist < THRESHOLD && topDist <= bottomDist) return "top";
+        if (bottomDist < THRESHOLD && bottomDist <= topDist) return "bottom";
+        return "none";
+    }
+
+    async function cropImage(img, position) {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const w = img.width, h = img.height;
+        if (position === "top") {
+            canvas.width = w;
+            canvas.height = h - BANNER_HEIGHT;
+            ctx.drawImage(img, 0, BANNER_HEIGHT, w, h - BANNER_HEIGHT, 0, 0, w, h - BANNER_HEIGHT);
+        } else if (position === "bottom") {
+            canvas.width = w;
+            canvas.height = h - BANNER_HEIGHT;
+            ctx.drawImage(img, 0, 0, w, h - BANNER_HEIGHT, 0, 0, w, h - BANNER_HEIGHT);
+        } else {
+            canvas.width = w;
+            canvas.height = h;
+            ctx.drawImage(img, 0, 0);
+        }
+        return new Promise(resolve => canvas.toBlob(resolve, "image/jpeg", 0.92));
+    }
+
+    // ----- FETCH & EXTRACT -----
+    async function fetchViaProxy(url) {
+        const proxyUrl = `${PROXY}?url=${encodeURIComponent(url)}`;
+        const res = await fetch(proxyUrl);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.text();
+    }
+
+    function extractImageUrlsFromHtml(html, baseUrl) {
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const images = doc.querySelectorAll('img[src], img[data-src]');
+        const urls = [];
+        images.forEach(img => {
+            let src = img.getAttribute('src') || img.getAttribute('data-src');
+            if (!src) return;
+            try {
+                if (!src.startsWith('http')) src = new URL(src, baseUrl).href;
+                src = convertImageUrl(src);
+                if (/\.(jpe?g|png|webp|gif)/i.test(src) && !/(ad|placeholder|logo|banner|sponsor|watermark|wm|cover)/i.test(src) && /(chapter|comic|manga|page)/i.test(src) && !/(thumb|icon|avatar)/i.test(src)) {
+                    urls.push(src);
+                }
+            } catch(e) {}
+        });
+        if (urls.length === 0) {
+            const regex = /https?:\/\/[^\/]+\.baozicdn\.com\/[^"' ]+\.(jpg|jpeg|png|webp|gif)/gi;
+            let matches = html.match(regex);
+            if (matches) matches.forEach(m => urls.push(convertImageUrl(m)));
+        }
+        if (!urls.length) throw new Error('No image links found');
+        let unique = [...new Set(urls)];
+        unique = unique.filter(u => !/cover/i.test(u));
+        unique.sort((a,b) => {
+            let na = a.match(/(\d+)\.(jpg|png|webp|gif)/i);
+            let nb = b.match(/(\d+)\.(jpg|png|webp|gif)/i);
+            return (na ? parseInt(na[1]) : 0) - (nb ? parseInt(nb[1]) : 0);
+        });
+        return unique;
+    }
+
+    async function extractLinksFromUrl(rawUrl) {
+        const fetchUrl = convertChapterUrl(rawUrl);
+        log(`Fetching: ${fetchUrl}`);
+        const html = await fetchViaProxy(fetchUrl);
+        return extractImageUrlsFromHtml(html, fetchUrl);
+    }
+
+    // ----- DOWNLOAD + BANNER CUT -----
+    async function downloadAndCrop(links) {
+        const zip = new JSZip();
+        setProgress(0);
+        log("Starting download...");
+        let success = 0, topCut = 0, bottomCut = 0, original = 0;
+
+        for (let i = 0; i < links.length; i++) {
+            const url = links[i];
+            const ext = url.split('.').pop().split('?')[0];
+            const filename = (i+1).toString().padStart(3,"0") + "." + ext;
+            log(`[${i+1}/${links.length}] ${filename}`);
+            try {
+                const proxyUrl = `${PROXY}?url=${encodeURIComponent(url)}`;
+                const resp = await fetch(proxyUrl);
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                const blob = await resp.blob();
+                const img = await new Promise((resolve,reject) => {
+                    const objUrl = URL.createObjectURL(blob);
+                    const imgEl = new Image();
+                    imgEl.onload = () => { URL.revokeObjectURL(objUrl); resolve(imgEl); };
+                    imgEl.onerror = () => { URL.revokeObjectURL(objUrl); reject(new Error("decode fail")); };
+                    imgEl.src = objUrl;
+                });
+                const pos = await detectBannerPosition(img);
+                let finalBlob;
+                if (pos === "top") {
+                    finalBlob = await cropImage(img, "top");
+                    topCut++;
+                    log("   ✂️ top banner removed");
+                } else if (pos === "bottom") {
+                    finalBlob = await cropImage(img, "bottom");
+                    bottomCut++;
+                    log("   ✂️ bottom banner removed");
+                } else {
+                    finalBlob = blob;
+                    original++;
+                    log("   → no banner");
+                }
+                zip.file(filename, finalBlob);
+                success++;
+            } catch (err) {
+                log(`   ✗ error: ${err.message}`, true);
+            }
+            setProgress(((i+1)/links.length)*100);
+            await new Promise(r => setTimeout(r, 180));
+        }
+        log(`Finished: ${success} ok (top:${topCut}, bottom:${bottomCut}, original:${original})`);
+        if (success === 0) return null;
+        log("Building ZIP...");
+        return await zip.generateAsync({ type: "blob" });
+    }
+
+    // ----- FALLBACK: UPLOAD HTML FILE -----
+    function extractFromHtmlFile(htmlContent) {
+        const doc = new DOMParser().parseFromString(htmlContent, 'text/html');
+        const images = doc.querySelectorAll('img[src], img[data-src]');
+        const urls = [];
+        images.forEach(img => {
+            let src = img.getAttribute('src') || img.getAttribute('data-src');
+            if (!src) return;
+            if (!src.startsWith('http')) src = new URL(src, 'https://fallback').href;
+            src = convertImageUrl(src);
+            if (/(chapter|comic|manga|page)/i.test(src) && /\.(jpe?g|png|webp|gif)/i.test(src) && !/(cover|thumb|icon|avatar)/i.test(src)) {
+                urls.push(src);
+            }
+        });
+        return [...new Set(urls)];
+    }
+
+    async function processUploadedFile(file) {
+        const text = await file.text();
+        const links = extractFromHtmlFile(text);
+        if (!links.length) throw new Error('No image links found in HTML file');
+        extractedLinks = links;
+        linkTextarea.value = extractedLinks.join("\n");
+        log(`✅ ${extractedLinks.length} links from uploaded file.`);
+        if (bannerReady) downloadBtn.disabled = false;
+    }
+
+    // ----- EVENT HANDLERS -----
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchBtn.onclick = async () => {
+            let rawUrl = urlInput.value.trim();
+            if (!rawUrl) {
+                alert("Enter a chapter URL");
+                return;
+            }
+            logBox.innerHTML = "";
+            log("Processing URL...");
+            setProgress(0);
+            downloadBtn.disabled = true;
+            extractedLinks = [];
+            linkTextarea.value = "";
+            try {
+                const links = await extractLinksFromUrl(rawUrl);
+                extractedLinks = links;
+                linkTextarea.value = extractedLinks.join("\n");
+                log(`✓ ${extractedLinks.length} images found`);
+                if (bannerReady) downloadBtn.disabled = false;
+            } catch (err) {
+                log(`Failed: ${err.message}`, true);
+                if (err.message.includes('403') || err.message.includes('HTTP')) {
+                    log("💡 Try fallback: save HTML and upload.", true);
+                    document.getElementById("uploadModal").style.display = 'flex';
+                }
+            }
+        };
+
+        resetBtn.onclick = () => {
+            resetAll();
+        };
+
+        downloadBtn.onclick = async () => {
+            if (!extractedLinks.length) { alert("No links. Fetch first."); return; }
+            if (!bannerReady) { alert("Banner reference not ready, please wait."); return; }
+            downloadBtn.disabled = true;
+            const zipBlob = await downloadAndCrop(extractedLinks);
+            if (zipBlob) {
+                const a = document.createElement("a");
+                a.href = URL.createObjectURL(zipBlob);
+                a.download = "baozi_chapter.zip";
+                a.click();
+                URL.revokeObjectURL(a.href);
+                log("✅ ZIP downloaded.");
+            }
+            downloadBtn.disabled = false;
+        };
+
+        // fallback modal
+        const modal = document.getElementById("uploadModal");
+        const uploadLink = document.getElementById("uploadFallbackLink");
+        const closeModalBtn = document.getElementById("closeModalBtn");
+        const processFallback = document.getElementById("processFallbackBtn");
+        const fallbackFile = document.getElementById("fallbackFile");
+        const fallbackLogSpan = document.getElementById("fallbackLog");
+
+        uploadLink.onclick = (e) => { e.preventDefault(); modal.style.display = 'flex'; };
+        closeModalBtn.onclick = () => { modal.style.display = 'none'; fallbackLogSpan.innerHTML = ""; };
+        processFallback.onclick = async () => {
+            const file = fallbackFile.files[0];
+            if (!file) { fallbackLogSpan.innerHTML = "Select an HTML file."; return; }
+            fallbackLogSpan.innerHTML = "Processing...";
+            try {
+                await processUploadedFile(file);
+                modal.style.display = 'none';
+                fallbackLogSpan.innerHTML = "";
+                fallbackFile.value = "";
+            } catch (err) {
+                fallbackLogSpan.innerHTML = `Error: ${err.message}`;
+            }
+        };
+        modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+    });
+
+    loadBannerReference();
+</script>
+</body>
+</html>
