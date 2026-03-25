@@ -19,27 +19,27 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 1.5rem;
+            padding: 1rem;
         }
 
         .glass-card {
-            max-width: 750px;
+            max-width: 780px;
             width: 100%;
             background: rgba(18, 22, 35, 0.75);
             backdrop-filter: blur(12px);
             border-radius: 2rem;
             border: 1px solid rgba(56, 217, 169, 0.25);
             box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(56, 217, 169, 0.1);
-            padding: 1.8rem 1.8rem 2rem;
+            padding: 1.5rem;
             transition: all 0.2s ease;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 1.8rem;
+            margin-bottom: 1.5rem;
         }
         h1 {
-            font-size: 1.9rem;
+            font-size: 1.8rem;
             font-weight: 600;
             background: linear-gradient(135deg, #e2ffe8, #9effcf);
             background-clip: text;
@@ -49,7 +49,7 @@
         }
         .sub {
             color: #8e9aaf;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             margin-top: 0.3rem;
         }
 
@@ -58,7 +58,7 @@
             width: 100%;
             background: #0f121e;
             border-radius: 60px;
-            padding: 0.25rem 1.2rem;
+            padding: 0 1.2rem;
             border: 1px solid #252e3f;
             transition: all 0.2s;
             margin-bottom: 1rem;
@@ -71,9 +71,9 @@
             width: 100%;
             background: transparent;
             border: none;
-            padding: 0.9rem 0;
+            padding: 0.85rem 0;
             color: #f0f3fa;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             outline: none;
         }
 
@@ -81,13 +81,14 @@
             display: flex;
             gap: 12px;
             margin-bottom: 1.2rem;
+            flex-wrap: wrap;
         }
         .button-group button {
-            flex: 1;
+            flex: 1 1 auto;
             background: #1f4735;
             border: none;
             border-radius: 50px;
-            padding: 0.75rem;
+            padding: 0.7rem 0.5rem;
             font-weight: 600;
             font-size: 0.85rem;
             color: white;
@@ -96,17 +97,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
+            min-width: 100px;
         }
         .button-group button:hover {
             background: #2c6e4f;
             transform: scale(0.98);
         }
-        .reset-btn {
+        .reset-btn, .settings-btn {
             background: #1e272e;
             border: 1px solid #2a3343;
         }
-        .reset-btn:hover {
+        .reset-btn:hover, .settings-btn:hover {
             background: #2a3343;
             border-color: #38d9a9;
         }
@@ -134,7 +136,7 @@
             width: 100%;
             border: none;
             border-radius: 60px;
-            padding: 0.9rem;
+            padding: 0.85rem;
             font-weight: 700;
             font-size: 1rem;
             color: white;
@@ -187,7 +189,7 @@
 
         .fallback {
             text-align: center;
-            margin-top: 1.2rem;
+            margin-top: 1rem;
             font-size: 0.7rem;
             color: #8e9aaf;
         }
@@ -200,6 +202,7 @@
             text-decoration: underline;
         }
 
+        /* Modal styles */
         .modal {
             display: none;
             position: fixed;
@@ -209,12 +212,13 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
+            padding: 1rem;
         }
         .modal-content {
             background: #11161f;
             border-radius: 1.8rem;
-            max-width: 380px;
-            width: 90%;
+            max-width: 420px;
+            width: 100%;
             padding: 1.5rem;
             border: 1px solid #2c6e4f;
             box-shadow: 0 20px 35px -10px black;
@@ -232,6 +236,7 @@
             display: flex;
             gap: 12px;
             margin-top: 1.5rem;
+            flex-wrap: wrap;
         }
         .modal-buttons button {
             flex: 1;
@@ -242,9 +247,13 @@
             font-weight: 600;
             color: white;
             cursor: pointer;
+            transition: 0.2s;
         }
         .modal-buttons button:first-child {
             background: #2c6e4f;
+        }
+        .modal-buttons button:hover {
+            filter: brightness(1.1);
         }
         input[type="file"] {
             background: #0a0e18;
@@ -255,7 +264,46 @@
             margin: 1rem 0;
             color: #eef;
         }
+        .settings-group {
+            margin-bottom: 1.2rem;
+        }
+        .settings-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-weight: 500;
+            color: #c7f0da;
+            font-size: 0.85rem;
+        }
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.25rem;
+            flex-wrap: wrap;
+        }
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: normal;
+            font-size: 0.8rem;
+            color: #b0c4de;
+        }
+        select {
+            background: #0a0e18;
+            border: 1px solid #2a3343;
+            border-radius: 40px;
+            padding: 0.5rem 1rem;
+            color: #f0f3fa;
+            font-size: 0.8rem;
+            width: 100%;
+            cursor: pointer;
+        }
+        select:focus {
+            outline: none;
+            border-color: #38d9a9;
+        }
 
+        /* Responsive adjustments */
         @media (max-width: 560px) {
             .glass-card {
                 padding: 1.2rem;
@@ -264,8 +312,44 @@
                 font-size: 1.5rem;
             }
             .button-group button {
-                font-size: 0.8rem;
-                padding: 0.65rem;
+                font-size: 0.75rem;
+                padding: 0.6rem 0.3rem;
+                min-width: 80px;
+            }
+            .btn-primary {
+                padding: 0.7rem;
+                font-size: 0.9rem;
+            }
+            .input-field input {
+                padding: 0.7rem 0;
+                font-size: 0.9rem;
+            }
+            textarea {
+                font-size: 0.7rem;
+                padding: 0.8rem;
+            }
+            .log-box {
+                max-height: 180px;
+                font-size: 0.65rem;
+            }
+            .modal-content {
+                padding: 1.2rem;
+            }
+            .modal-content h3 {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .button-group {
+                gap: 8px;
+            }
+            .button-group button {
+                font-size: 0.7rem;
+                padding: 0.55rem 0.2rem;
+            }
+            .glass-card {
+                padding: 1rem;
             }
         }
     </style>
@@ -278,18 +362,19 @@
     </div>
 
     <div class="input-field">
-        <input type="text" id="chapterUrl" placeholder="https://app.baozimh.com/... or twmanga.com/...">
+        <input type="text" id="chapterUrl" placeholder="https://twmanga.com/...">
     </div>
 
     <div class="button-group">
-        <button id="fetchBtn">⟳ Fetch links</button>
-        <button id="resetBtn" class="reset-btn">⟳ Reset</button>
+        <button id="fetchBtn">Fetch Links</button>
+        <button id="resetBtn" class="reset-btn">Reset</button>
+        <button id="settingsBtn" class="settings-btn">Settings</button>
     </div>
 
     <textarea id="linkList" rows="3" placeholder="Image links will appear here after fetch..." readonly></textarea>
 
     <button id="downloadBtn" class="btn-primary" disabled>
-        <span>⬇️</span> Download & cut banner
+        Download Process
     </button>
 
     <div class="progress-wrap">
@@ -303,7 +388,37 @@
     </div>
 
     <div class="fallback">
-        💡 Having trouble? <a href="#" id="uploadFallbackLink">Upload saved HTML file</a> (Ctrl+S)
+        Having trouble? <a href="#" id="uploadFallbackLink">Upload saved HTML file</a> (Ctrl+S)
+    </div>
+</div>
+
+<!-- Modal for Advanced Settings -->
+<div id="settingsModal" class="modal">
+    <div class="modal-content">
+        <h3>Advanced Settings</h3>
+        <div class="settings-group">
+            <label>Proxy Server:</label>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" name="proxyChoice" value="YOUR_PROXY1"> Proxy 1
+                </label>
+                <label>
+                    <input type="radio" name="proxyChoice" value="YOUR_PROXY2"> Proxy 2
+                </label>
+            </div>
+        </div>
+        <div class="settings-group">
+            <label>Threshold:</label>
+            <select id="thresholdSelect">
+                <option value="80">80 (Default)</option>
+                <option value="90">90 (Medium)</option>
+                <option value="100">100 (Super High)</option>
+            </select>
+        </div>
+        <div class="modal-buttons">
+            <button id="saveSettingsBtn">Save & Close</button>
+            <button id="closeSettingsBtn">Cancel</button>
+        </div>
     </div>
 </div>
 
@@ -322,15 +437,12 @@
 </div>
 
 <script>
-    // ---------- CONFIG ----------
-    const PROXY = "YOUR_PROXY";
+    // ---------- CONFIG (dynamic) ----------
+    let PROXY = "YOUR_PROXY1";     // default proxy
+    let THRESHOLD = 80;                                           // default threshold
     const BANNER_REF_URL = "https://i.imgur.com/PKrIsv3.jpeg";
     const BANNER_HEIGHT = 200;
     const HASH_SIZE = 32;
-    const THRESHOLD = 80;
-
-    const BAOZICDN_REGEX = /^https?:\/\/(?:[\w-]+)\.baozicdn\.com\/(.+)$/;
-    const STATIC_URL_PREFIX = 'https://static-tw.baozimh.com/';
 
     let extractedLinks = [];
     let bannerHash = null;
@@ -340,10 +452,18 @@
     const urlInput = document.getElementById("chapterUrl");
     const fetchBtn = document.getElementById("fetchBtn");
     const resetBtn = document.getElementById("resetBtn");
+    const settingsBtn = document.getElementById("settingsBtn");
     const linkTextarea = document.getElementById("linkList");
     const downloadBtn = document.getElementById("downloadBtn");
     const progressFill = document.getElementById("progressFill");
     const logBox = document.getElementById("logBox");
+
+    // Settings modal elements
+    const settingsModal = document.getElementById("settingsModal");
+    const saveSettingsBtn = document.getElementById("saveSettingsBtn");
+    const closeSettingsBtn = document.getElementById("closeSettingsBtn");
+    const proxyRadios = document.querySelectorAll('input[name="proxyChoice"]');
+    const thresholdSelect = document.getElementById("thresholdSelect");
 
     function log(msg, isError = false) {
         const prefix = isError ? "⚠️ " : "▸ ";
@@ -364,6 +484,48 @@
         logBox.innerHTML = "Ready for use!";
     }
 
+    // Save & load settings from localStorage
+    function loadSavedSettings() {
+        const savedProxy = localStorage.getItem("baozi_proxy");
+        const savedThreshold = localStorage.getItem("baozi_threshold");
+        if (savedProxy && (savedProxy === "YOUR_PROXY1" || savedProxy === "YOUR_PROXY2")) {
+            PROXY = savedProxy;
+        } else {
+            PROXY = "YOUR_PROXY2";
+        }
+        if (savedThreshold && [80,90,100].includes(parseInt(savedThreshold))) {
+            THRESHOLD = parseInt(savedThreshold);
+        } else {
+            THRESHOLD = 80;
+        }
+        // sync radio & select
+        const radioToCheck = document.querySelector(`input[name="proxyChoice"][value="${PROXY}"]`);
+        if (radioToCheck) radioToCheck.checked = true;
+        thresholdSelect.value = THRESHOLD;
+    }
+
+    function saveSettingsToLocal() {
+        localStorage.setItem("baozi_proxy", PROXY);
+        localStorage.setItem("baozi_threshold", THRESHOLD);
+        log(`⚙️ Settings saved`);
+    }
+
+    function applySettingsFromModal() {
+        let selectedProxy = null;
+        for (let radio of proxyRadios) {
+            if (radio.checked) {
+                selectedProxy = radio.value;
+                break;
+            }
+        }
+        if (selectedProxy) PROXY = selectedProxy;
+        const newThreshold = parseInt(thresholdSelect.value);
+        if (!isNaN(newThreshold) && [80,90,100].includes(newThreshold)) THRESHOLD = newThreshold;
+        saveSettingsToLocal();
+        settingsModal.style.display = "none";
+        log(`Settings updated`);
+    }
+
     function convertChapterUrl(inputUrl) {
         let url = inputUrl.trim();
         if (!url.startsWith('http')) url = 'https://' + url;
@@ -381,6 +543,8 @@
     }
 
     function convertImageUrl(imageUrl) {
+        const BAOZICDN_REGEX = /^https?:\/\/(?:[\w-]+)\.baozicdn\.com\/(.+)$/;
+        const STATIC_URL_PREFIX = 'https://static-tw.baozimh.com/';
         if (BAOZICDN_REGEX.test(imageUrl)) {
             return imageUrl.replace(BAOZICDN_REGEX, STATIC_URL_PREFIX + '$1');
         }
@@ -398,6 +562,7 @@
             if (extractedLinks.length) downloadBtn.disabled = false;
         } catch (err) {
             logBox.innerHTML = "⚠️ Banner failed to load";
+            console.error(err);
         }
     }
 
@@ -522,8 +687,9 @@
 
     async function extractLinksFromUrl(rawUrl) {
         const fetchUrl = convertChapterUrl(rawUrl);
-        log(`Fetching: ${fetchUrl}`);
+        log(`Fetching chapter data...`);
         const html = await fetchViaProxy(fetchUrl);
+        log(`✓ Fetching success, parsing images...`);
         return extractImageUrlsFromHtml(html, fetchUrl);
     }
 
@@ -609,6 +775,8 @@
 
     // ----- EVENT HANDLERS -----
     document.addEventListener('DOMContentLoaded', () => {
+        loadSavedSettings();
+
         fetchBtn.onclick = async () => {
             let rawUrl = urlInput.value.trim();
             if (!rawUrl) {
@@ -654,6 +822,23 @@
                 log("✅ ZIP downloaded.");
             }
             downloadBtn.disabled = false;
+        };
+
+        // Advanced settings modal
+        settingsBtn.onclick = () => {
+            // sync current values to modal
+            document.querySelector(`input[name="proxyChoice"][value="${PROXY}"]`).checked = true;
+            thresholdSelect.value = THRESHOLD;
+            settingsModal.style.display = 'flex';
+        };
+        saveSettingsBtn.onclick = () => {
+            applySettingsFromModal();
+        };
+        closeSettingsBtn.onclick = () => {
+            settingsModal.style.display = 'none';
+        };
+        settingsModal.onclick = (e) => {
+            if (e.target === settingsModal) settingsModal.style.display = 'none';
         };
 
         // fallback modal
