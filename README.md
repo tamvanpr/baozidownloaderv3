@@ -18,7 +18,7 @@ Baozi Downloader V3 adalah web tool berbasis HTML + JavaScript untuk mengambil g
 3. Klik Fetch Links
 4. Setelah link muncul, klik Download Process
 5. File ZIP akan otomatis terunduh
-
+ > Bisa juga diupload ke pihak ketiga seperti `Netlify`
 
 
 ## Konfigurasi Proxy (WAJIB)
