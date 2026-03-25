@@ -25,7 +25,7 @@ Baozi Downloader V3 adalah web tool berbasis HTML + JavaScript untuk mengambil g
 
   Di dalam file "index.html", terdapat 2 bagian berikut:
 
-   `"YOUR_PROXY1" dan "YOUR_PROXY2`
+   `"YOUR_PROXY1" dan "YOUR_PROXY2"`
     Ganti "YOUR_PROXY1" dan "YOUR_PROXY2" dengan URL proxy milikmu.
 
 ## Requirement Proxy
