@@ -15,8 +15,8 @@ Baozi Downloader V3 adalah web tool berbasis HTML + JavaScript untuk mengambil g
 
 1. Buka file "index.html"
 2. Masukkan URL chapter: `https://www.twmanga.com/...`
-3. Klik Fetch links
-4. Setelah link muncul, klik Download & cut banner
+3. Klik Fetch Links
+4. Setelah link muncul, klik Download Process
 5. File ZIP akan otomatis terunduh
 
 
